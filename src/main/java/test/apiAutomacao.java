@@ -24,7 +24,6 @@ public class apiAutomacao {
                 .log().all()
                 .statusCode(201)
                 .body("message", Matchers.is("Cadastro realizado com sucesso"))
-
         ;
     }
 }
