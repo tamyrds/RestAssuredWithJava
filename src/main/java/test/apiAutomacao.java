@@ -26,5 +26,18 @@ public class apiAutomacao {
                 .body("message", Matchers.is("Cadastro realizado com sucesso"))
         ;
     }
+
+    @Test
+    public void listasUsuarios(){
+        RestAssured.given()
+                .contentType("application/json")
+                .when()
+                    .get("https://serverest.dev/usuarios")
+                .then()
+
+                .statusCode(200)
+                .body("usuarios.nome[0]", Matchers.is("Fulano da Silva"))
+        ;
+    }
 }
 
