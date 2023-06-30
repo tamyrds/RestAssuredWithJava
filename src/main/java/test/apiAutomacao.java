@@ -10,7 +10,7 @@ import java.net.URI;
 public class apiAutomacao {
 
     @Test
-    public void CadastrarUser(){
+    public void CadastrarUser() {
 
         RestAssured.given()
                 .log().all()
@@ -18,9 +18,9 @@ public class apiAutomacao {
                 .body("{\n" +
                         "    \"nome\":\"Tamires Silva\", \"email\":\"teste@te.com.br\",\"password\":\"teste123\",\"administrador\": \"true\"\n" +
                         "        }")
-            .when()
+                .when()
                 .post("https://serverest.dev/usuarios")
-            .then()
+                .then()
                 .log().all()
                 .statusCode(201)
                 .body("message", Matchers.is("Cadastro realizado com sucesso"))
@@ -28,16 +28,44 @@ public class apiAutomacao {
     }
 
     @Test
-    public void listasUsuarios(){
+    public void listasUsuarios() {
         RestAssured.given()
                 .contentType("application/json")
                 .when()
-                    .get("https://serverest.dev/usuarios")
+                .get("https://serverest.dev/usuarios")
                 .then()
 
                 .statusCode(200)
                 .body("usuarios.nome[0]", Matchers.is("Fulano da Silva"))
         ;
     }
-}
 
+    @Test
+    public void realizarLoginSucesso() {
+        RestAssured.given()
+                .log().all()
+                .contentType("application/json")
+                .body("{\"email\": \"beltrano@qa.com.br\", \"password\": \"teste\"}")
+                .when()
+                .post("https://serverest.dev/login")
+                .then()
+                .statusCode(200)
+                .log().all()
+                .body("message", Matchers.is("Login realizado com sucesso"))
+        ;
+    }
+
+    @Test
+    public void realizarLoginInvalido() {
+        RestAssured.given()
+                .contentType("application/json")
+                .body("{\"email\": \"beltran@qa.com.br\", \"password\": \"teste\"}")
+                .when()
+                .post("https://serverest.dev/login")
+                .then()
+                .statusCode(401)
+                .log().all()
+                .body("message", Matchers.is("Email e/ou senha inválidos"))
+        ;
+    }
+}
